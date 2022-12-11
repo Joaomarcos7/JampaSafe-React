@@ -1,39 +1,48 @@
 import Card from './card'
 import React from 'react'
 import { useState } from 'react'
-
-
+import {getlocalstorage,setlocalstorage} from './LocalStorage/localstorage'
 
 function Main(){
 
   const [values,setvalues]=useState('')
 
-const handlechanges=(values)=>{
-    setvalues((prevvalues)=>({...prevvalues,[values.target.name]:values.target.value,}))
+
+  /*async function getbairro(cep){
+    const url= 'https://viacep.com.br/ws/' + cep + '/json/'
+   const response = await fetch(url)
+   const info =  await response.json()
+   const bairro=info.bairro
+   return bairro
+  } */
+
+
+const handlechanges=(event)=>{
+    setvalues((prevvalues)=>({...prevvalues,[event.target.name]:event.target.value,}))
 }
-
-
-const handlesubmit=()=>{
-addcard(values)
-
-}
-
-
-const getlocalstorage=()=>JSON.parse(localStorage.getItem('db')) ?? []
-
-const setlocalstorage=(card)=>localStorage.setItem('db',JSON.stringify(card))
 
 const addcard=(card)=>{
   let db=getlocalstorage()
   db.push(card)
   setlocalstorage(db)
+  //setvalues('')
 }
 
-const removecard=(index)=>{
-  let db=getlocalstorage()
-  db.splice(index,1)
-  setlocalstorage(db)
+const isvalid=()=>{
+ return document.querySelector('.form').reportValidity()
 }
+
+
+
+const handlesubmit=()=>{
+  if (isvalid()){
+addcard(values)
+  }
+  else{
+    alert('Voce não preencheu tudo!')
+  }
+}
+
 
 
 //const createrelatos=()=>{
@@ -43,6 +52,8 @@ const removecard=(index)=>{
       //<Card tipo={db.Tipo} data={db.Data} bairro={db.Bairro} descricao={db.Descrição}/>
     //)
   //})
+
+
 
 
 
@@ -59,7 +70,7 @@ const removecard=(index)=>{
                     Relatar
                   </button>
                   <span className="mt-1 fs-5"> Acompanhe nossas Estatísticas!</span>
-                  <button  type="button" className="btn btn-success mx-3 fs-6" id="ranking"> Ver Ranking</button>
+                  <button  type="button" className="btn btn-success mx-3 fs-6" id="ranking" onClick={()=>document.querySelector('dialog').showModal()} > Ver Ranking</button>
 
 
                   
@@ -68,7 +79,8 @@ const removecard=(index)=>{
                     <div  style={{width:'80%' ,display: 'flex',justifyContent: 'space-between',marginLeft: '20%'}}>
 
                     <h3 style={{textAlign: 'center',marginLeft:'23%',marginTop:'4%'}}>Ranking de Tipos</h3>
-                    <button type="button" className="btn-close" id="closedialog" ></button>
+                      <Ranking/>
+                    <button type="button" className="btn-close" id="closedialog" onClick={()=>document.querySelector('dialog').close()} ></button>
 
                   </div>
 
@@ -84,7 +96,7 @@ const removecard=(index)=>{
                           <button type="button" className="btn-close" data-bs-dismiss="modal" id="close" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                          <form id="form" >
+                          <form className="form" >
                             <div className="mb-3">
                               <p style={{color:'red',fontsize:'1.2rem'}}> Etapa Imagem ainda em Manutenção 🚧...</p>
                               <label  className="form-label" >Imagem</label>
@@ -92,7 +104,8 @@ const removecard=(index)=>{
                             </div>
                               <label htmlFor="formFile" className="form-label" >Tipo</label>
                             <select className="form-select mb-3 modal-field" aria-label="Default select example" id="tipo" name='Tipo' onChange={handlechanges}required>
-                              <option value='Poluição do Solo'>Poluição do Solo</option>
+                              <option >Escolha o Tipo:</option>
+                              <option value="Poluição do Solo"  >Poluição do Solo</option>
                               <option value="Poluição da água">Poluição da Água</option>
                               <option value="Poluição do Ar">Poluição do Ar</option>
                               <option value="Depósitos de Lixo a Céu Aberto">Depósitos de Lixo a Céu Aberto</option>
@@ -101,9 +114,9 @@ const removecard=(index)=>{
                               <option value="Assoreamento de Rios">Assoreamento de Rios</option>
                               <option value="Outros">Outros</option>
                             </select>
-                              <label htmlFor="formFile" className="form-label" >Bairro</label>
-                            <input type="text" className="form-control modal-field" id="CEP" data-index="new"  name='Bairro' onChange={handlechanges} required/>
-                              <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" style={{textdecoration:'none', fontsize:'1rem'}}>Não sabe seu CEP? Clique aqui</a>
+                              <label htmlFor="formFile" className="form-label" >CEP</label>
+                            <input type="text" className="form-control modal-field" id="CEP" data-index="new"  name='CEP' onChange={handlechanges} required/>
+                              <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" style={{textDecoration:'none', fontSize:'1rem'}}>Não sabe seu CEP? Clique aqui</a>
                             <div className="mb-3">
                               <label htmlFor="title" className="form-label " >Data</label>
                               <input type="date" className="form-control modal-field" onChange={handlechanges} id="title" name='Data'  required/>
@@ -128,12 +141,12 @@ const removecard=(index)=>{
         </section>
 
         <section className="principal mt-5">
-            <h3 className="text-center text-uppercase pt-5 text-black" id="cont"> 0 Problemas relatado(s)</h3>
+            <h3 className="text-center text-uppercase pt-5 text-black" id="cont"> {getlocalstorage().length} Problemas relatado(s)</h3>
 
             <div class="cards d-flex flex-wrap" id='cards'>
 
           {
-          getlocalstorage().map((card,index) => <Card Data={card.Data.split('-').reverse().join('/')} Tipo={card.Tipo} Bairro={card.Bairro} Descrição={card.Descrição} id={index} />)
+          getlocalstorage().map((card,index) => <Card Data={card.Data.split('-').reverse().join('/')} Tipo={card.Tipo} Bairro={card.CEP} Descrição={card.Descrição} id={index} />) 
           }
 
             </div>
@@ -143,7 +156,7 @@ const removecard=(index)=>{
 
         <section id="section-about" className="about">
 
-          <div className="about-container d-flex justify-content-center align-items-center p-5"/>
+          <div className="about-container d-flex justify-content-center align-items-center p-5">
             <div className="about-image">
               <img src="imgs/about.png" width="480px" height="414px" alt="sobre nos"/>
             </div>
@@ -151,6 +164,7 @@ const removecard=(index)=>{
               <p className="text-uppercase fs-6 text-success">sobre nós</p>
               <h2 className="somos pb-3">Entenda quem somos e por que existimos</h2>
               <p className="descrip">Nós somos uma equipe que se preocupa com o destino ambiental da nossa cidade. Vemos que crimes contra o meio ambiente vem se tornando cada mês mais recorrentes e os órgãos responsáveis não tomam as medidas adequadas por falta de informação. Nesse âmbito, decidimos criar uma plataforma web bastante acessível e fácil de ser utilizada que agrupa dados e informações em relação aos problemas ambientais da cidade (João Pessoa), diretamente da população, que serão utilizadas pelos líderes governamentais para resolver esses problemas.</p>
+            </div>
             </div>
           </section>
   

@@ -4,7 +4,7 @@ function Header(){
         <nav className="navbar navbar-expand-lg px-4">
 
         <div className="container-fluid">
-          <a className="navbar-brand" href="#"><img src="imgs/logo.png" width="150" height="70" alt="logo"/></a>
+          <a className="navbar-brand" href="#"><img src="../../public/imgs/logo.png" width="150" height="70" alt="logo"/></a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
