@@ -6,18 +6,43 @@ import { useState } from 'react'
 
 function Main(){
 
-        const [values,setvalues]=useState('')
+  const [values,setvalues]=useState('')
 
 const handlechanges=(values)=>{
     setvalues((prevvalues)=>({...prevvalues,[values.target.name]:values.target.value,}))
 }
 
+
 const handlesubmit=()=>{
-console.log(values)
+addcard(values)
+
 }
 
 
+const getlocalstorage=()=>JSON.parse(localStorage.getItem('db')) ?? []
 
+const setlocalstorage=(card)=>localStorage.setItem('db',JSON.stringify(card))
+
+const addcard=(card)=>{
+  let db=getlocalstorage()
+  db.push(card)
+  setlocalstorage(db)
+}
+
+const removecard=(index)=>{
+  let db=getlocalstorage()
+  db.splice(index,1)
+  setlocalstorage(db)
+}
+
+
+//const createrelatos=()=>{
+ //let db=getlocalstorage()
+  //db.map(()=>{
+    //return(
+      //<Card tipo={db.Tipo} data={db.Data} bairro={db.Bairro} descricao={db.Descrição}/>
+    //)
+  //})
 
 
 
@@ -88,7 +113,7 @@ console.log(values)
                               <label htmlFor="exampleFormControlTextarea1" className="form-label">Descrição</label>
                               <textarea className="form-control modal-field" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição do problema" name='Descrição' onChange={handlechanges} required></textarea>
                             </div>
-                            <button type='button' id='modal-button' className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" onClick={()=>handlesubmit()} >Enviar</button>
+                            <button type='submit' id='modal-button' className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" onClick={()=>handlesubmit()} >Enviar</button>
                           </form>
                         </div>
                       </div>
@@ -107,7 +132,12 @@ console.log(values)
 
             <div class="cards d-flex flex-wrap" id='cards'>
 
+          {
+          getlocalstorage().map((card,index) => <Card Data={card.Data.split('-').reverse().join('/')} Tipo={card.Tipo} Bairro={card.Bairro} Descrição={card.Descrição} id={index} />)
+          }
+
             </div>
+            
 
         </section>
 
