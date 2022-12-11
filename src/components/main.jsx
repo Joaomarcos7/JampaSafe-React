@@ -1,8 +1,26 @@
 import Card from './card'
+import React from 'react'
+import { useState } from 'react'
 
 
 
 function Main(){
+
+        const [values,setvalues]=useState('')
+
+const handlechanges=(values)=>{
+    setvalues((prevvalues)=>({...prevvalues,[values.target.name]:values.target.value,}))
+}
+
+const handlesubmit=()=>{
+console.log(values)
+}
+
+
+
+
+
+
 
     return(
 
@@ -16,15 +34,15 @@ function Main(){
                     Relatar
                   </button>
                   <span className="mt-1 fs-5"> Acompanhe nossas Estatísticas!</span>
-                  <button type="button" className="btn btn-success mx-3 fs-6" id="ranking"> Ver Ranking</button>
+                  <button  type="button" className="btn btn-success mx-3 fs-6" id="ranking"> Ver Ranking</button>
 
 
                   
                   <dialog id="dialog" > 
 
-                    <div  style={{width:'80%' ,display: 'flex',justifycontent: 'space-between',marginLeft: '20%'}}>
+                    <div  style={{width:'80%' ,display: 'flex',justifyContent: 'space-between',marginLeft: '20%'}}>
 
-                    <h3 style={{textalign: 'center',marginLeft:'23%',marginTop:'4%'}}>Ranking de Tipos</h3>
+                    <h3 style={{textAlign: 'center',marginLeft:'23%',marginTop:'4%'}}>Ranking de Tipos</h3>
                     <button type="button" className="btn-close" id="closedialog" ></button>
 
                   </div>
@@ -41,15 +59,15 @@ function Main(){
                           <button type="button" className="btn-close" data-bs-dismiss="modal" id="close" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                          <form id="form">
+                          <form id="form" >
                             <div className="mb-3">
                               <p style={{color:'red',fontsize:'1.2rem'}}> Etapa Imagem ainda em Manutenção 🚧...</p>
                               <label  className="form-label" >Imagem</label>
                               <input className="form-control modal-field" type="file" id="formFile" />
                             </div>
                               <label htmlFor="formFile" className="form-label" >Tipo</label>
-                            <select className="form-select mb-3 modal-field" aria-label="Default select example" id="tipo" required>
-                              <option value>Poluição do Solo</option>
+                            <select className="form-select mb-3 modal-field" aria-label="Default select example" id="tipo" name='Tipo' onChange={handlechanges}required>
+                              <option value='Poluição do Solo'>Poluição do Solo</option>
                               <option value="Poluição da água">Poluição da Água</option>
                               <option value="Poluição do Ar">Poluição do Ar</option>
                               <option value="Depósitos de Lixo a Céu Aberto">Depósitos de Lixo a Céu Aberto</option>
@@ -59,18 +77,18 @@ function Main(){
                               <option value="Outros">Outros</option>
                             </select>
                               <label htmlFor="formFile" className="form-label" >Bairro</label>
-                            <input type="text" className="form-control modal-field" id="CEP" data-index="new"  required/>
+                            <input type="text" className="form-control modal-field" id="CEP" data-index="new"  name='Bairro' onChange={handlechanges} required/>
                               <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" style={{textdecoration:'none', fontsize:'1rem'}}>Não sabe seu CEP? Clique aqui</a>
                             <div className="mb-3">
                               <label htmlFor="title" className="form-label " >Data</label>
-                              <input type="date" className="form-control modal-field" id="title" required/>
+                              <input type="date" className="form-control modal-field" onChange={handlechanges} id="title" name='Data'  required/>
                             </div>
 
                             <div className="mb-3">
                               <label htmlFor="exampleFormControlTextarea1" className="form-label">Descrição</label>
-                              <textarea className="form-control modal-field" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição do problema" required></textarea>
+                              <textarea className="form-control modal-field" id="exampleFormControlTextarea1" rows="3" placeholder="Descrição do problema" name='Descrição' onChange={handlechanges} required></textarea>
                             </div>
-                            <button type='button' id='modal-button' className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" >Enviar</button>
+                            <button type='button' id='modal-button' className="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" onClick={()=>handlesubmit()} >Enviar</button>
                           </form>
                         </div>
                       </div>
@@ -87,7 +105,9 @@ function Main(){
         <section className="principal mt-5">
             <h3 className="text-center text-uppercase pt-5 text-black" id="cont"> 0 Problemas relatado(s)</h3>
 
-            <Card/>
+            <div class="cards d-flex flex-wrap" id='cards'>
+
+            </div>
 
         </section>
 
@@ -121,6 +141,6 @@ function Main(){
       </main>
       )
    }
-   
+
    export default Main
    
