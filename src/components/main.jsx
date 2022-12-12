@@ -25,14 +25,29 @@ const isvalid=()=>{
 
 
 
+
+function formatarCEP(str){
+	var re = /^([\d]{2})\.*([\d]{3})-*([\d]{3})/; // Pode usar ? no lugar do *
+
+	if(re.test(str)){
+		return str.replace(re,"$1.$2-$3");
+	}else{
+		alert("CEP inválido!");
+	}
+	
+	return "";
+}
+
 const handlesubmit=()=>{
   let special=document.querySelector('#CEP').dataset.index
   if(special=='new'){
 addcard(values)
+formatarCEP(values.CEP)
   }
   else{
     editcard(values,parseInt(special))
     special='new'
+    formatarCEP(values.CEP)
 }
   
 }
@@ -111,7 +126,7 @@ addcard(values)
                               <option value="Outros">Outros</option>
                             </select>
                               <label htmlFor="formFile" className="form-label" >CEP</label>
-                            <input type="text" className="form-control modal-field " id="CEP" data-index="new"  name='CEP' onChange={handlechanges} required/>
+                            <input type="text" className="form-control modal-field " id="CEP" data-index="new"  name='CEP' onChange={handlechanges} maxlength='8' required/>
                               <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" style={{textDecoration:'none', fontSize:'1rem'}}>Não sabe seu CEP? Clique aqui</a>
                             <div className="mb-3">
                               <label htmlFor="title" className="form-label " >Data</label>
