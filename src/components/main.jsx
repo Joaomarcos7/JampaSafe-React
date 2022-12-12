@@ -1,21 +1,12 @@
 import Card from './card'
 import React from 'react'
 import { useState } from 'react'
-import {getlocalstorage,setlocalstorage} from './LocalStorage/localstorage'
+import {getlocalstorage,setlocalstorage,editcard} from './LocalStorage/localstorage'
+import Ranking from './ranking'
 
 function Main(){
 
   const [values,setvalues]=useState('')
-
-
-  /*async function getbairro(cep){
-    const url= 'https://viacep.com.br/ws/' + cep + '/json/'
-   const response = await fetch(url)
-   const info =  await response.json()
-   const bairro=info.bairro
-   return bairro
-  } */
-
 
 const handlechanges=(event)=>{
     setvalues((prevvalues)=>({...prevvalues,[event.target.name]:event.target.value,}))
@@ -27,20 +18,23 @@ const addcard=(card)=>{
   setlocalstorage(db)
   //setvalues('')
 }
-
+/*
 const isvalid=()=>{
  return document.querySelector('.form').reportValidity()
-}
+}*/
 
 
 
 const handlesubmit=()=>{
-  if (isvalid()){
+  let special=document.querySelector('#CEP').dataset.index
+  if(special=='new'){
 addcard(values)
   }
   else{
-    alert('Voce não preencheu tudo!')
-  }
+    editcard(values,parseInt(special))
+    special='new'
+}
+  
 }
 
 
@@ -66,7 +60,7 @@ addcard(values)
                 <h2 className="fs-1">Ajude João Pessoa!</h2>
                 <p className="mt-3 fs-4">Encontrou algum problema ambiental?</p>
                 <span className="mt-1 fs-5">Relate aqui!
-                  <button type="button" className="btn btn-success mx-3 fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal" id="relatar">
+                  <button type="button" className="btn btn-success mx-3 fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal" id="relatar" onClick={()=>document.querySelector('#CEP').dataset.index='new'}>
                     Relatar
                   </button>
                   <span className="mt-1 fs-5"> Acompanhe nossas Estatísticas!</span>
@@ -79,12 +73,14 @@ addcard(values)
                     <div  style={{width:'80%' ,display: 'flex',justifyContent: 'space-between',marginLeft: '20%'}}>
 
                     <h3 style={{textAlign: 'center',marginLeft:'23%',marginTop:'4%'}}>Ranking de Tipos</h3>
-                      <Ranking/>
+
+                      
                     <button type="button" className="btn-close" id="closedialog" onClick={()=>document.querySelector('dialog').close()} ></button>
 
                   </div>
 
-          
+                  <Ranking/>
+
                   </dialog>
                   
                   
@@ -115,7 +111,7 @@ addcard(values)
                               <option value="Outros">Outros</option>
                             </select>
                               <label htmlFor="formFile" className="form-label" >CEP</label>
-                            <input type="text" className="form-control modal-field" id="CEP" data-index="new"  name='CEP' onChange={handlechanges} required/>
+                            <input type="text" className="form-control modal-field " id="CEP" data-index="new"  name='CEP' onChange={handlechanges} required/>
                               <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" style={{textDecoration:'none', fontSize:'1rem'}}>Não sabe seu CEP? Clique aqui</a>
                             <div className="mb-3">
                               <label htmlFor="title" className="form-label " >Data</label>

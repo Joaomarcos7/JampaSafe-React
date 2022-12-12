@@ -7,7 +7,11 @@ export const setlocalstorage=(card)=>localStorage.setItem('db',JSON.stringify(ca
 
 
 
- 
+ export const editcard=(card,index)=>{
+let db =getlocalstorage()
+db[index]=card
+setlocalstorage(db)
+ }
   
 
 
