@@ -1,0 +1,37 @@
+footer {
+    width: 100vw;
+    height: auto;
+    background-color: rgb(25, 135, 84);
+    padding-top: 50px;
+    padding-bottom: 20px;
+  }
+
+.socials {
+  list-style: none;
+}
+
+.socials a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+
+.social a i {
+  font-size: 1.1rem;
+  transition: color .4s ease;
+}
+
+.face:hover {
+  color: rgb(59, 89, 152);
+}
+
+.insta:hover {
+  color: rgb(255, 192, 203);
+}
+
+.twit:hover {
+  color: rgb(0, 172, 238);
+}
+
+.scale:hover{
+  transform: scale(1.4);
+}
