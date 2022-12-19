@@ -33,16 +33,19 @@ function formatarCEP(str){
 		return str.replace(re,"$1.$2-$3");
 	}else{
 		alert("CEP inválido!");
+    return false
 	}
 	
-	return "";
 }
 
 const handlesubmit=()=>{
   let special=document.querySelector('#CEP').dataset.index
   if(special=='new'){
-addcard(values)
-formatarCEP(values.CEP)
+    let l = formatarCEP(values.CEP)
+    if (l!==false){
+      addcard(values)
+    }
+    
   }
   else{
     editcard(values,parseInt(special))
